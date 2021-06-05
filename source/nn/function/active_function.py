@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 
+big_number = 10000
 
 class ActiveFunction:
     __metaclass__ = ABCMeta
@@ -17,11 +18,28 @@ class ActiveFunction:
 
 class SigmoidFunction(ActiveFunction):
     def g(self, z):
+        e_z = np.exp(-z)
+        e_z[e_z == np.inf] = big_number
         return 1 / (1 + np.exp(-z))
 
     def derivative_g(self, a):
         sigm_a = self.g(a)
         return sigm_a * (1 - sigm_a)
+
+    def derivative_g_quick(self, a, y): raise NotImplementedError
+
+class TanhFunction(ActiveFunction):
+    def g(self, z):
+        #print(z)
+        e_a_z = np.exp(z)
+        e_a_z[e_a_z == np.inf] = big_number
+        e_m_z = np.exp(-z)
+        e_m_z[e_m_z == np.inf] = big_number
+        return (e_a_z -e_m_z) / (e_a_z +e_m_z)
+
+    def derivative_g(self, a):
+        #print(a)
+        return 1 - np.power(a,2)
 
     def derivative_g_quick(self, a, y): raise NotImplementedError
 
