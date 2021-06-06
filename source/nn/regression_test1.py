@@ -14,7 +14,7 @@ from nn.function.util import normalize as norm
 from nn.function.loss_function import MeanSquaredError
 from nn.function.util import print_util as pu
 from nn.mp import Layer
-
+np.random.seed(1)
 data = pd.read_csv('./data/regression/data.activation.train.10000.csv')
 #data = pd.read_csv('./data/regression/data.cube.train.1000.csv')
 print(data.head(5))
@@ -43,13 +43,13 @@ relu = ReluFunction()
 # layers.append(Layer(1, LinnerFunction()))
 layers.append(Layer(1, None))
 layers.append(Layer(4, SigmoidFunction()))
-#layers.append(Layer(6, SigmoidFunction()))
+layers.append(Layer(6, SigmoidFunction()))
 #layers.append(Layer(6, ReluFunction()))
 #layers.append(Layer(6, ReluFunction()))
 layers.append(Layer(1, LinnerFunction()))
 
-multilayerPerceptron = MultilayerPerceptron(x_train, y_train, layers,MeanSquaredError())
-costs = multilayerPerceptron.train(1000, 300, 0.1, 0.1)
+multilayerPerceptron = MultilayerPerceptron( layers,MeanSquaredError())
+costs = multilayerPerceptron.train(x_train, y_train,3000, 10000, 0.1, 0.1)
 print("costs=")
 print(costs)
 plt.plot(range(len(costs)), costs)

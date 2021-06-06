@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import nn.function.util.plot_util as plot
+
 import matplotlib.image as mping
 import math
 from nn.mp import MultilayerPerceptron
@@ -33,8 +34,8 @@ layers.append(Layer(3, ReluFunction()))
 #layers.append(Layer(7, ReluFunction()))
 #layers.append(Layer(3, ReluFunction()))
 layers.append(Layer(1, SigmoidFunction()))
-multilayerPerceptron = MultilayerPerceptron(x_train, y_train, layers,BinaryCrossEntropy())
-costs = multilayerPerceptron.train(1000, 10000 , 0.1 )
+multilayerPerceptron = MultilayerPerceptron(layers,BinaryCrossEntropy(),weight_scale=0.1)
+costs = multilayerPerceptron.train(x_train, y_train, 1000, 10000 , 0.1 )
 print("costs=")
 print(costs)
 plt.plot(range(len(costs)), costs)

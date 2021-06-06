@@ -10,20 +10,23 @@ from nn.mp import MultilayerPerceptron
 from nn.function.active_function import ReluFunction
 from nn.function.active_function import SigmoidFunction
 from nn.function.active_function import TanhFunction
-from nn.function.loss_function import CrossEntropy
+from nn.function.active_function import LinnerFunction
+from nn.function.loss_function import MeanSquaredError
+from nn.function.loss_function import MeanAbsoluteError
 from nn.function.active_function import SoftMaxFunction
 from nn.mp import Layer
 import nn.test.execute_test as et
 np.random.seed(1)
-data_train = pd.read_csv('./../data/classification/data.three_gauss.train.100.csv')
-data_test = pd.read_csv('./../data/classification/data.three_gauss.test.100.csv')
-(x_train, y_train, x_test, y_test) = pre.prepare_data_train_test(data_train, data_test,one_hot_encoding=True)
+
+data_train = pd.read_csv('./../data/regression/data.cube.train.1000.csv')
+data_test = pd.read_csv('./../data/regression/data.cube.train.1000.csv')
+(x_train, y_train, x_test, y_test) = pre.prepare_data_train_test(data_train, data_test,normalize_x=True, normalize_y=True)
 print(x_train.shape)
 print(y_train.shape)
 print(x_test.shape)
 print(y_test.shape)
 # hyper parameters
-max_loops = 3000
+max_loops = 100
 batch_size = 10000
 alpha = 0.1
 # end hyper parameters
@@ -36,65 +39,38 @@ num_per_case = 3
 mpls = []
 # relu
 layers = []
-layers.append(Layer(2, None))
-layers.append(Layer(4, ReluFunction()))
-layers.append(Layer(3, SoftMaxFunction()))
+layers.append(Layer(1, None))
+layers.append(Layer(1, LinnerFunction()))
 
-figure, axis = plt.subplots(3, num_per_case)
-figure_bounary, axis_bounary = plt.subplots(3, num_per_case)
+figure, axis = plt.subplots(2, num_per_case)
+figure_bounary, axis_bounary = plt.subplots(2, num_per_case)
+#MeanSquaredError
 for i in range(0,num_per_case):
 
-    mpl = MultilayerPerceptron(layers,CrossEntropy(), weight_scale=0.5)
-    (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
+    mpl = MultilayerPerceptron(layers,MeanSquaredError(), weight_scale=0.5)
+    (cost, train_deviation_error, train_mean_error,train_deviation_error,train_mean_error)=et.exec_regression(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
-    mpl_precisions.append(("layer1-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 0,i  ,"layer1-" + str(i))
+    mpl_precisions.append(("MSE-" + str(i), train_deviation_error, train_mean_error,train_deviation_error,train_mean_error))
+    plot.plot_cost(cost,axis, 0,i  ,"MSE-" + str(i))
+    mpls.append(mpl)
+    plot.plot_regression_curl_axis(x_train[:,0:100],y_train[:,0:100],x_test[:,0:100],y_test[:,0:100],mpl,axis_bounary, 0,i,"MSE-"+ str(i))
+
+# MeanAbsoluteError
+for i in range(0,num_per_case):
+
+    mpl = MultilayerPerceptron(layers,MeanAbsoluteError(),weight_scale=0.1)
+    (cost, train_deviation_error, train_mean_error,train_deviation_error,train_mean_error)=et.exec_regression(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
+    mpl_costs.append(cost)
+    mpl_precisions.append(("MAE-" + str(i), train_deviation_error, train_mean_error,train_deviation_error,train_mean_error))
+    plot.plot_cost(cost,axis, 1,i,"MAE-" + str(i))
     mpls.append(mpl)
     # if i == 0:
     #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 0,i,"layer1-"+ str(i))
-
-# sigmoid
-layers = []
-layers.append(Layer(2, None))
-layers.append(Layer(4, ReluFunction()))
-layers.append(Layer(4, ReluFunction()))
-layers.append(Layer(3, SoftMaxFunction()))
-for i in range(0,num_per_case):
-
-    mpl = MultilayerPerceptron(layers,CrossEntropy(),weight_scale=0.1)
-    (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
-    mpl_costs.append(cost)
-    mpl_precisions.append(("layer2-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 1,i,"layer2-" + str(i))
-    mpls.append(mpl)
-    # if i == 0:
-    #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 1,i,"layer2-"+ str(i))
+    plot.plot_regression_curl_axis(x_train[:,0:100],y_train[:,0:100],x_test[:,0:100],y_test[:,0:100],mpl,axis_bounary, 1,i,"MAE-"+ str(i))
 #
-# # tanh
-layers = []
-layers.append(Layer(2, None))
-layers.append(Layer(4, ReluFunction()))
-layers.append(Layer(6, ReluFunction()))
-layers.append(Layer(4, ReluFunction()))
-layers.append(Layer(3, SoftMaxFunction()))
-for i in range(0,num_per_case):
-
-    mpl = MultilayerPerceptron(layers,CrossEntropy(),weight_scale=0.3)
-    (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
-    mpl_costs.append(cost)
-    mpl_precisions.append(("layer3-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 2,i,"layer3-" + str(i))
-    # if i == 0:
-    #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 2,i,"layer3-"+ str(i))
-    #print(cost)
-    mpls.append(mpl)
-
 
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.show()
-for i in range (0,3*num_per_case,num_per_case):
-    plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpls[i])
-print(mpl_precisions)
+
+for x, y1, y2, z1, z2 in mpl_precisions:
+    print(x, y1, y2, z1, z2 )

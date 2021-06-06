@@ -41,18 +41,19 @@ layers.append(Layer(4, ReluFunction()))
 layers.append(Layer(3, SoftMaxFunction()))
 
 figure, axis = plt.subplots(3, num_per_case)
+plt.subplots_adjust(wspace=0.5,hspace=0.5)
 figure_bounary, axis_bounary = plt.subplots(3, num_per_case)
 for i in range(0,num_per_case):
 
     mpl = MultilayerPerceptron(layers,CrossEntropy(), weight_scale=0.5)
     (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
-    mpl_precisions.append(("layer1-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 0,i  ,"layer1-" + str(i))
+    mpl_precisions.append(("1 layer-" + str(i), train_precision,test_precision))
+    plot.plot_cost(cost,axis, 0,i  ,"1 layer-" + str(i))
     mpls.append(mpl)
     # if i == 0:
     #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 0,i,"layer1-"+ str(i))
+    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 0,i,"1 layer-"+ str(i))
 
 # sigmoid
 layers = []
@@ -65,12 +66,12 @@ for i in range(0,num_per_case):
     mpl = MultilayerPerceptron(layers,CrossEntropy(),weight_scale=0.1)
     (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
-    mpl_precisions.append(("layer2-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 1,i,"layer2-" + str(i))
+    mpl_precisions.append(("2 layer-" + str(i), train_precision,test_precision))
+    plot.plot_cost(cost,axis, 1,i,"2 layer-" + str(i))
     mpls.append(mpl)
     # if i == 0:
     #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 1,i,"layer2-"+ str(i))
+    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 1,i,"2 layer-"+ str(i))
 #
 # # tanh
 layers = []
@@ -84,11 +85,11 @@ for i in range(0,num_per_case):
     mpl = MultilayerPerceptron(layers,CrossEntropy(),weight_scale=0.3)
     (cost, train_precision, test_precision)=et.exec_multipl_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
-    mpl_precisions.append(("layer3-" + str(i), train_precision,test_precision))
-    plot.plot_cost(cost,axis, 2,i,"layer3-" + str(i))
+    mpl_precisions.append(("3 layer-" + str(i), train_precision,test_precision))
+    plot.plot_cost(cost,axis, 2,i,"3 layer-" + str(i))
     # if i == 0:
     #     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpl)
-    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 2,i,"layer3-"+ str(i))
+    plot.plot_multipl_decision_region_axis(x_train[:,0:100],y_train[:,0:100],3,mpl,axis_bounary, 2,i,"3 layer-"+ str(i))
     #print(cost)
     mpls.append(mpl)
 
@@ -97,4 +98,5 @@ plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.show()
 for i in range (0,3*num_per_case,num_per_case):
     plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,mpls[i])
-print(mpl_precisions)
+for x, y, z in mpl_precisions:
+    print(x, y, z)

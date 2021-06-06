@@ -14,7 +14,7 @@ from nn.function.loss_function import BinaryCrossEntropy
 from nn.function.loss_function import MeanSquaredError
 from nn.mp import Layer
 import nn.test.execute_test as et
-
+np.random.seed(115)
 data_train = pd.read_csv('./../data/classification/data.simple.train.1000.csv')
 data_test = pd.read_csv('./../data/classification/data.simple.test.1000.csv')
 (x_train, y_train, x_test, y_test) = pre.prepare_data_train_test(data_train, data_test)
@@ -25,9 +25,10 @@ data_test = pd.read_csv('./../data/classification/data.simple.test.1000.csv')
 y_train = y_train -1
 y_test = y_test -1
 # hyper parameters
-max_loops = 500
+max_loops = 3000
 batch_size = 10000
-alpha = 0.1
+alpha = 0.05
+weight_scale = 0.7
 # end hyper parameters
 np.random.seed(1)
 # statistics
@@ -37,14 +38,15 @@ num_per_case = 4
 # relu
 layers = []
 layers.append(Layer(2, None))
-layers.append(Layer(3, ReluFunction()))
+layers.append(Layer(4, ReluFunction()))
+layers.append(Layer(4, ReluFunction()))
 #layers.append(Layer(3, ReluFunction()))
 layers.append(Layer(1, SigmoidFunction()))
 
 figure, axis = plt.subplots(2, num_per_case)
 for i in range(0,num_per_case):
 
-    mpl = MultilayerPerceptron(layers,BinaryCrossEntropy(),weight_scale=0.3)
+    mpl = MultilayerPerceptron(layers,BinaryCrossEntropy(),weight_scale=weight_scale)
     (cost, train_precision, test_precision)=et.exec_binary_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
     mpl_precisions.append(("BCE-" + str(i), train_precision,test_precision))
@@ -58,7 +60,7 @@ layers.append(Layer(3, SigmoidFunction()))
 layers.append(Layer(1, SigmoidFunction()))
 for i in range(0,num_per_case):
 
-    mpl = MultilayerPerceptron(layers,MeanSquaredError(),weight_scale=0.3)
+    mpl = MultilayerPerceptron(layers,MeanSquaredError(),weight_scale=weight_scale)
     (cost, train_precision, test_precision)=et.exec_binary_cls(mpl,x_train,y_train,x_test, y_test,max_loops,batch_size, alpha)
     mpl_costs.append(cost)
     mpl_precisions.append(("MSE-" + str(i), train_precision,test_precision))
@@ -69,4 +71,5 @@ for i in range(0,num_per_case):
 
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.show()
-print(mpl_precisions)
+for x, y, z in mpl_precisions:
+    print(x, y, z)

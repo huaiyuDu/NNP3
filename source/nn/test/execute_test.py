@@ -21,3 +21,18 @@ def exec_multipl_cls(mlp, x_train, y_train, x_test, y_test, max_times, batch_siz
     train_precision = (y_train_predict*y_train).sum()/ y_train.shape[1] * 100
     test_precision = (y_test_predict*y_test).sum()/ y_test.shape[1] * 100
     return cost, train_precision, test_precision
+
+def exec_regression(mlp, x_train, y_train, x_test, y_test, max_times, batch_size, alpha, momentum=0):
+    cost = mlp.train(x_train, y_train, max_times, batch_size, alpha, momentum)
+    y_train_predict = mlp.test(x_train)
+    y_test_predict = mlp.test(x_test)
+
+    train_error = y_train_predict- y_train
+    train_deviation_error = np.std(train_error)
+    train_mean_error = np.mean(train_error)
+
+    test_error = y_test_predict- y_test
+    train_deviation_error = np.std(test_error)
+    train_mean_error = np.mean(test_error)
+
+    return cost, train_deviation_error, train_mean_error,train_deviation_error,train_mean_error

@@ -49,6 +49,49 @@ def plot_multipl_decision_region_axis(X, y, num_label ,classifier, axis, i, j , 
                     label=cl,
                     edgecolors='black')
 
+def plot_regression_curl_axis(X, y ,X_test, y_test ,classifier,axis, i, j , title,  resolution=0.02):
+    markers = ('s', 'x', 'v')
+    colors = ('red', 'blue', 'yellow')
+
+
+    # plot the decision surface
+    # 这里+1  -1的操作我理解为防止样本落在图的边缘处，不知道对不对
+    x1_min, x1_max = X.min() - 1, X.max() + 1
+    # print(x1_min, x1_max)
+
+    #x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    # print(x2_min, x2_max)
+
+    # 生成网格点坐标矩阵
+    x_line = np.arange(x1_min, x1_max, resolution)
+    x_line = x_line.reshape((1,x_line.shape[0]))
+
+    # xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution),
+    #                        np.arange(x2_min, x2_max, resolution))
+    # xAera = np.array([xx1.ravel(), xx2.ravel()])
+    # print(xAera.shape)
+
+    y_line = classifier.test(x_line)
+
+    # 绘制轮廓等高线  alpha参数为透明度
+    # plt.contourf(xx1, xx2, Z_new, alpha=0.3, cmap=cmap)
+    # plt.xlim(xx1.min(), xx1.max())
+    # plt.ylim(xx2.min(), xx2.max())
+    axis[i,j].plot(x_line.ravel(), y_line.ravel(), color='r')
+    axis[i,j].set_title(title)
+
+    axis[i,j].scatter(X,
+                y,
+                alpha=0.8,
+                c=colors[0],
+                marker=markers[0],
+                edgecolors='black')
+    axis[i,j].scatter(X_test,
+                y_test,
+                alpha=0.8,
+                c=colors[1],
+                marker=markers[1],
+                edgecolors='black')
 
 def plot_decision_region(X, y, classifier, resolution=0.02):
     markers = ('s', 'x')

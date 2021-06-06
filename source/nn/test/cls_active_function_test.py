@@ -54,7 +54,7 @@ layers = []
 layers.append(Layer(2, None))
 layers.append(Layer(3, SigmoidFunction()))
 #layers.append(Layer(3, SigmoidFunction()))
-layers.append(Layer(3, SigmoidFunction()))
+layers.append(Layer(1, SigmoidFunction()))
 for i in range(0,num_per_case):
 
     mpl = MultilayerPerceptron(layers,BinaryCrossEntropy(),weight_scale=0.3)
@@ -81,4 +81,5 @@ for i in range(0,num_per_case):
 
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.show()
-print(mpl_precisions)
+for x, y, z in mpl_precisions:
+    print(x, y, z)

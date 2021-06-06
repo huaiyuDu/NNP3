@@ -44,15 +44,22 @@ class MeanSquaredError(ILossFunction):
 
         return 2*(a - y)/ y.shape[0]
 
+class MeanAbsoluteError(ILossFunction):
+    def loss(self, y, a):
+        return np.sum(abs(y-a), axis=0, keepdims= True)/y.shape[0]
+
+    def derivative_loss(self, y, a):
+
+        return np.where(y > a, -1, +1)/ y.shape[0]
+
 #
-lossF = BinaryCrossEntropy()
+#lossF = BinaryCrossEntropy()
 # y = np.array([[1 , 1],
 #               [0, 1]])
 # a = np.array([[0.5, 0.1],
 #               [0.1 , 0.9]])
 y = np.array([[1 , 1]])
-a = np.array([[0.1 , 0.999999]])
-l = lossF.loss(y, a)
-d_l= lossF.derivative_loss(y, a)
-print(l)
-print(d_l)
+a = np.array([[0.1 , 0.9]])
+
+
+print(np.where(y >= a, 1, -1))
