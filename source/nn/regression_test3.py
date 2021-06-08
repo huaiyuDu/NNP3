@@ -18,6 +18,7 @@ from nn.mp import Layer
 
 #data = pd.read_csv('./data/regression/data.activation.train.1000.csv')
 data = pd.read_csv('./data/regression/data.cube.train.1000.csv')
+np.random.seed(1)
 print(data.head(5))
 s = data.values.shape
 data = data.values

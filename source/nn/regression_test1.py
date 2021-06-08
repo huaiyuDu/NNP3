@@ -49,6 +49,7 @@ layers.append(Layer(6, SigmoidFunction()))
 layers.append(Layer(1, LinnerFunction()))
 
 multilayerPerceptron = MultilayerPerceptron( layers,MeanSquaredError())
+#costs = multilayerPerceptron.train(x_train, y_train,1000, 10000, 0.1, 0.1)
 costs = multilayerPerceptron.train(x_train, y_train,3000, 10000, 0.1, 0.1)
 print("costs=")
 print(costs)
@@ -90,3 +91,12 @@ print("test_mean_error=" + str(test_mean_error))
 plot.plot_regression_curl(x_train[:,0:100],y_train[:,0:100],x_test[:,0:100],y_test[:,0:100],multilayerPerceptron)
 pu.print_weights_biases(multilayerPerceptron.weights,multilayerPerceptron.biases)
 
+
+unrolled_weight_his = plot.unroll_weight_his(multilayerPerceptron.weight_his)
+plt.plot(unrolled_weight_his[:,0])
+plt.xlabel = "weight history"
+plt.show()
+unrolled_delta_weight_his = plot.unroll_weight_his(multilayerPerceptron.delta_weight_his)
+plt.plot(unrolled_delta_weight_his[:,0])
+plt.xlabel= "delta weight history"
+plt.show()

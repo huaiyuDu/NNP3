@@ -57,6 +57,7 @@ class MultilayerPerceptron:
                     loop_times += 1
                     start = start + batch_size
                 except StopTrainException as e:
+                    print("gradient is too small")
                     return costs
         return costs
 
@@ -109,6 +110,7 @@ class MultilayerPerceptron:
             last_delta_b_his_rocord = self.delta_b_his[len(self.delta_b_his) - 1]
 
         for layer_index in range(num_layers - 1, 0, -1):
+            #print('layer_index'+str(layer_index))
             z = z_catch[layer_index]
             if isinstance(layers[layer_index].active_function, SoftMaxFunction):
                 d_z = layers[layer_index].active_function.derivative_g_quick(a_catch[num_layers - 1], train_y)

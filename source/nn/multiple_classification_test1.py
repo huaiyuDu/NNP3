@@ -42,7 +42,7 @@ plt.show()
 
 predict_y = multilayerPerceptron.test(x_train)
 predict_y = np.where(predict_y > 0.5, 1, 0)
-plt.xlabel('==========')
+
 
 train_precision = (predict_y*y_train).sum() / y_train.shape[1] * 100
 print("train_precision=" + str(train_precision))
@@ -57,3 +57,14 @@ print("test_precision=" + str(test_precision))
 
 plot.plot_multipl_decision_region(x_train[:,0:100],y_train[:,0:100],3,multilayerPerceptron)
 plot.plot_multipl_decision_region(x_test[:,0:100],y_test[:,0:100],3,multilayerPerceptron)
+
+unrolled_weight_his = plot.unroll_weight_his(multilayerPerceptron.weight_his)
+plt.plot(unrolled_weight_his[:,0])
+#plt.plot(unrolled_weight_his[:,1])
+plt.xlabel = "weight history"
+plt.show()
+unrolled_delta_weight_his = plot.unroll_weight_his(multilayerPerceptron.delta_weight_his)
+plt.plot(unrolled_delta_weight_his[:,0])
+#plt.plot(unrolled_delta_weight_his[:,1])
+plt.xlabel= "delta weight history"
+plt.show()

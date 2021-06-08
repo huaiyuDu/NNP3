@@ -31,7 +31,7 @@ layers.append(Layer(784, None))
 layers.append(Layer(25, ReluFunction()))
 layers.append(Layer(10, SoftMaxFunction()))
 
-multilayerPerceptron = MultilayerPerceptron(layers, CrossEntropy(),weight_scale=0.3)
+multilayerPerceptron = MultilayerPerceptron(layers, CrossEntropy(),weight_scale=1)
 costs = multilayerPerceptron.train(x_train, y_train, 6000, 3000 , 0.1 ,0.3)
 print("costs=")
 #print(costs)

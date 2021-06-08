@@ -19,6 +19,7 @@ from nn.mp import Layer
 data = pd.read_csv('./data/regression/data.activation.train.1000.csv')
 #data = pd.read_csv('./data/regression/data.cube.train.1000.csv')
 print(data.head(5))
+np.random.seed(1)
 s = data.values.shape
 data = data.values
 (data, mean, deviation) = norm.normalize(data)
@@ -52,8 +53,8 @@ layers.append(Layer(1, LinnerFunction()))
 
 multilayerPerceptron = MultilayerPerceptron( layers,MeanSquaredError())
 costs = multilayerPerceptron.train(x_train_extend, y_train,20000, 300, 0.005, 0.0)
-print("costs=")
-print(costs)
+#print("costs=")
+#print(costs)
 plt.plot(range(len(costs)), costs)
 plt.xlabel('Grident steps')
 plt.xlabel('costs')

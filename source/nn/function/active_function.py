@@ -17,11 +17,15 @@ class ActiveFunction:
 
 
 class SigmoidFunction(ActiveFunction):
+    # def g(self, z):
+    #     e_z = np.exp(-z)
+    #     e_z[e_z == np.inf] = big_number
+    #     #return 1 / (1 + np.exp(-z))
+    #     return 1 / (1 + e_z)
     def g(self, z):
-        e_z = np.exp(-z)
-        e_z[e_z == np.inf] = big_number
+        #e_z = np.exp(-z)
+        #e_z[e_z == np.inf] = big_number
         return 1 / (1 + np.exp(-z))
-
     def derivative_g(self, a):
         sigm_a = self.g(a)
         return sigm_a * (1 - sigm_a)
@@ -30,6 +34,7 @@ class SigmoidFunction(ActiveFunction):
 
 class TanhFunction(ActiveFunction):
     def g(self, z):
+        #print('z')
         #print(z)
         e_a_z = np.exp(z)
         e_a_z[e_a_z == np.inf] = big_number
@@ -38,8 +43,9 @@ class TanhFunction(ActiveFunction):
         return (e_a_z -e_m_z) / (e_a_z +e_m_z)
 
     def derivative_g(self, a):
+        #print('a')
         #print(a)
-        return 1 - np.power(a,2)
+        return 1 - np.power(self.g(a), 2)
 
     def derivative_g_quick(self, a, y): raise NotImplementedError
 
