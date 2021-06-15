@@ -36,11 +36,15 @@ class MultilayerPerceptron:
                 biases[layer_index] = np.zeros(row_num, 1)
         return weights, biases
 
-    def train(self, X, Y, max_times, batch_size, alpha, momentum=0):
+    def train(self, X, Y, max_times, batch_size, alpha, momentum=0, validateX = None, validateY = None):
         # np.array_split(self.X, )
         num_test_case = X.shape[1]
         loop_times = 0
         costs = []
+        costs_validate = []
+        costs_train = []
+        weight_his = []
+        bias_his = []
         for i in range(max_times):
             for start in range(0, num_test_case, batch_size):
                 x_train = X[:, start:start + batch_size]
@@ -59,7 +63,16 @@ class MultilayerPerceptron:
                 except StopTrainException as e:
                     print("gradient is too small")
                     return costs
-        return costs
+            # validation
+            if i % 100 == 0 and validateX is not None and validateY is not None:
+                num_examples = validateX.shape[1]
+                predict_validate_Y = self.test(validateX)
+                validate_cost = 1 / num_examples * np.sum(self.loss_function.loss(validateY, predict_validate_Y))
+                costs_validate.append(validate_cost)
+                costs_train.append(cost)
+                weight_his.append(self.weights)
+                bias_his.append(self.biases)
+        return costs,costs_validate,costs_train,weight_his,bias_his
 
     def test(self, test_x):
         # np.array_split(self.X, )

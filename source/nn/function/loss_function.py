@@ -16,6 +16,8 @@ class ILossFunction:
 
 class BinaryCrossEntropy(ILossFunction):
     def loss(self, y, a):
+        a[np.isclose(a, 0, atol=tolerance)] = tolerance
+        a[np.isclose(a, 1, atol=tolerance)] = 1-tolerance
         n = y.shape[0]
         return - 1/n * np.sum(y * np.log(a) + (1-y) * np.log(1-a), axis=0, keepdims= True)
 

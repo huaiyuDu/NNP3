@@ -9,8 +9,8 @@ def plot_cost(costs, axis, i, j , title):
     axis[i,j].set_title(title)
 
 def plot_multipl_decision_region_axis(X, y, num_label ,classifier, axis, i, j , title, resolution=0.02):
-    markers = ('s', 'x', 'v')
-    colors = ('red', 'blue' , 'yellow')
+    markers = ('s', 'x', 'v','<')
+    colors = ('red', 'blue' , 'yellow','black')
     fack_labels = np.arange(num_label)
 
     cmap = ListedColormap(colors[:num_label])
@@ -50,8 +50,8 @@ def plot_multipl_decision_region_axis(X, y, num_label ,classifier, axis, i, j , 
                     edgecolors='black')
 
 def plot_regression_curl_axis(X, y ,X_test, y_test ,classifier,axis, i, j , title,  resolution=0.02):
-    markers = ('s', 'x', 'v')
-    colors = ('red', 'blue', 'yellow')
+    markers = ('s', 'x', 'v','<')
+    colors = ('red', 'blue' , 'yellow','black')
 
 
     # plot the decision surface
@@ -125,16 +125,16 @@ def plot_decision_region(X, y, classifier, resolution=0.02):
     plt.show()
 
 def plot_multipl_decision_region(X, y, num_label ,classifier, resolution=0.02):
-    markers = ('s', 'x', 'v')
-    colors = ('red', 'blue' , 'yellow')
+    markers = ('s', 'x', 'v','<')
+    colors = ('red', 'blue' , 'yellow','black')
     fack_labels = np.arange(num_label)
     cmap = ListedColormap(colors[:num_label])
 
     # plot the decision surface
-    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    x1_min, x1_max = X[0,:].min() - 0.2, X[0,:].max() + 0.2
     # print(x1_min, x1_max)
 
-    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    x2_min, x2_max = X[1,:].min() - 0.2, X[1,:].max() + 0.2
     # print(x2_min, x2_max)
 
     xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution),
